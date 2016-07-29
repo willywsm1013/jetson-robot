@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import cv2
 import numpy as np
 import sys
@@ -89,9 +90,11 @@ def findConvexHull(img, preprocess,
     img_edge = cv2.Canny(img_blur, edge_th_min, edge_th_max)
     img_edge = cv2.morphologyEx(img_edge, cv2.MORPH_CLOSE, (3,3))
     if show:
-        cv2.imshow('img_edge'+name, img_edge)
+        cv2.imshow('img_edge' + name, img_edge)
 
     ## find contours ##
+    t = cv2.findContours(img_edge, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+    print(len(t))
     _, cnts, hierarchy = cv2.findContours(img_edge, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
     #cnts = sorted(cnts, key = cv2.contourArea, reverse = True)[:50]
     '''cnts_approx = []
@@ -283,7 +286,7 @@ def findPeak(histr, max_num, th):
 
 if __name__ == '__main__':
     img_name = 'board1'
-    img = cv2.imread('./test_data/' + img_name + '.jpg')
+    img = cv2.imread('alphabet/test_data/' + img_name + '.jpg')
     img = cv2.resize(img, (640, 480))
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
