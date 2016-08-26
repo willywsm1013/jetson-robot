@@ -9,7 +9,8 @@ class Arduino(Thread):
     def __init__(self):
         Thread.__init__(self)
         try:
-            self.dev = serial.Serial('/dev/cu.usbmodem14141')
+            # self.dev = serial.Serial('/dev/cu.usbmodem14141')
+            self.dev = serial.Serial('/dev/ttyACM0')
         except:
             # dev = serial.Serial('/dev/ttyACM1')
             pass
@@ -21,7 +22,7 @@ class Arduino(Thread):
         print("Arduino ready")
 
     def write(self, command):
-        print(command)
+        # print(command)
         self.dev.write(command)
 
     def push(self, command):

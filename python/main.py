@@ -4,9 +4,14 @@ import numpy as np
 import tty
 import sys
 import select
+import termios
 from car.car import Car
 from arduino import Arduino
 from time import sleep
+
+fd = sys.stdin.fileno()
+old = termios.tcgetattr(fd)
+tty.setraw(fd)
 
 arduino = Arduino()
 car = Car(arduino)
@@ -15,6 +20,7 @@ arduino.start()
 def terminate():
     arduino.terminate()
     arduino.join()
+    termios.tcsetattr(fd, termios.TCSADRAIN, old)
     sys.exit()
 
 def Usage():
@@ -49,7 +55,6 @@ def key(com):
         terminate()
     elif com == 'c':
         tty.setcbreak(sys.stdin.fileno())
-tty.setraw(sys.stdin.fileno())
 
 while True:
     while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
