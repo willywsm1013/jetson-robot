@@ -36,16 +36,19 @@ sleep(2)
 car.stop()
 """
 
+rSpeed, lSpeed = 0, 0
+
 def key(com):
+    # up
     if com == '\x1b[A':
         car.setSpeed(20, 20)
-        # print("up")
+    # down
     elif com == '\x1b[B':
         car.setSpeed(-20, -20)
-        # print("down")
+    # right
     elif com == '\x1b[C':
         car.setSpeed(-20, 20)
-        # print("right")
+    # left
     elif com == '\x1b[D':
         car.setSpeed(20, -20)
         # print("left")
