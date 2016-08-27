@@ -5,9 +5,10 @@ class Car:
         self.p = 0.5
         self.i = 0
         self.d = 1
-        self.rSpeed = 20
-        self.lSpeed = 20
         self.accum = 0
+        self.rSpeed = 0
+        self.lSpeed = 0
+        self.gamma = 0.5
 
     def forward(self, angle):
         self.accum += angle
@@ -18,6 +19,10 @@ class Car:
     def setSpeed(self, right, left):
         self.rSpeed = right
         self.lSpeed = left
+        """
+        self.rSpeed += self.gamma * (right - self.rSpeed)
+        self.lSpeed += self.gamma * (left - self.lSpeed)
+        """
         self.toArduino()
 
     def rotate(self, angle):

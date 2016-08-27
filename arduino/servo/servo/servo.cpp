@@ -4,24 +4,20 @@
 #define LEFT  5
 #define RIGHT  3
 
-Servo LServo;
-Servo RServo;
+Servo lServo;
+Servo rServo;
 unsigned long timeStart=0;
 unsigned long timePass;
 char serialData[32];
 int cnt=0;
+int rSpeed, lSpeed, rNow, lNow;
 
 void setup() {
     pinMode(LEFT, OUTPUT);
     pinMode(RIGHT, OUTPUT);
-    LServo.attach(LEFT);
-    RServo.attach(RIGHT);
+    lServo.attach(LEFT);
+    rServo.attach(RIGHT);
     Serial.begin(9600);
-}
-
-void setSpeed(int RSpeed,int LSpeed){
-    LServo.write(90-LSpeed);
-    RServo.write(RSpeed+90);
 }
 
 bool parseCommand(char* command, int* returnValues, byte returnNumber)
@@ -76,19 +72,24 @@ void loop() {
         switch(serialData[0]){
             case 's' :
                 int speed[2];
-                timePass=millis()-timeStart;
-                timeStart=millis();
+                timePass = millis() - timeStart;
+                timeStart = millis();
                 //timeDelay=timePass*0.75+timeDelay*0.15;
                 if(timePass > 100) timePass=100;
                 //Serial.print("time : ");
                 //Serial.println(timePass);
-                if(parseCommand(serialData,speed,2)){
-                    setSpeed(speed[0],speed[1]);
-                    delay( timePass/2 + timePass/4);
+                if(parseCommand(serialData, speed, 2)){
+                    lSpeed = speed[0];
+                    rSpeed = speed[1];
+                    delay(timePass/2 + timePass/4);
                     //setSpeed(90,90);
                 }
                 break;
         }
         //Serial.println("Finish");
     }
+    lServo.write(90 - lNow);
+    rServo.write(rNow + 90);
+    lNow += (lSpeed - lNow) * 0.1;
+    rNow += (rSpeed - rNow) * 0.1;
 }
